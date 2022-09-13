@@ -1,8 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 import snscrape.modules.twitter as sntwitter
-import time
-import sys
+from numpy import random
+from time import sleep
 
 
 class TwitterBot:
@@ -13,29 +14,35 @@ class TwitterBot:
 
     def login(self):
         bot = self.bot
-        bot.get('https://twitter.com/')
-        time.sleep(5)
-
-        # Find login Button
-        login = bot.find_element_by_css_selector(
-            'a.css-1dbjc4n:nth-child(2) > div:nth-child(1) > span:nth-child(1) > span:nth-child(1)')
-        login.click()
-        time.sleep(5)
+        bot.get('https://twitter.com/i/flow/login')
+        sleep(5)
 
         # Find username
-        email = bot.find_element_by_css_selector('.r-30o5oe')
+        email = ''
+        while not email:
+            try:
+                email = bot.find_element(by=By.XPATH, value='//input')
+            except Exception as ex:
+                sleep(2)
         email.click()
         email.clear()
         email.send_keys(self.username)
         email.send_keys(Keys.RETURN)
-        time.sleep(2)
+        sleep(2)
 
         # Find password
-        password = bot.find_element_by_css_selector('.r-homxoj')
+        password = ''
+        while not password:
+            try:
+                password = bot.find_element(
+                    by=By.XPATH, value='//input[@type="password"]')
+            except Exception as ex:
+                sleep(2)
+        password.click()
         password.clear()
         password.send_keys(self.password)
         password.send_keys(Keys.RETURN)
-        time.sleep(5)
+        sleep(5)
 
     def like_tweets(self, hashtag):
         bot = self.bot
@@ -51,19 +58,21 @@ class TwitterBot:
 
             for w in tweets:
                 bot.get(w)
-                time.sleep(5)
+                sleeptime1 = random.uniform(5, 11)
+                sleeptime2 = random.uniform(10, 16)
+                sleep(sleeptime1)
                 try:
-                    heart = bot.find_element_by_xpath(
-                        '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/section/div/div/div[1]/div/div/div[1]/article/div/div/div/div[3]/div[7]/div/div[3]')
+                    heart = bot.find_element(
+                        by=By.XPATH, value='//div[@aria-label="Like"]')
                     heart.click()
-                    time.sleep(15)
+                    sleep(sleeptime2)
                 except Exception as ex:
-                    time.sleep(15)
+                    sleep(sleeptime2)
 
-            time.sleep(60*30)
+            sleeptime3 = random.uniform(30, 60)
+            sleep(60*sleeptime3)
 
 
-neno = TwitterBot('your username', 'your password')
+neno = TwitterBot('ALJAWDAH_FUND', 'sos@17.N')
 neno.login()
-neno.like_tweets('your hashtag or nitch')
-sys.exit()
+neno.like_tweets('NFT')
