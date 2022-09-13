@@ -73,6 +73,6 @@ class TwitterBot:
             sleep(60*sleeptime3)
 
 
-neno = TwitterBot('ALJAWDAH_FUND', 'sos@17.N')
+neno = TwitterBot('your username', 'your password')
 neno.login()
-neno.like_tweets('NFT')
+neno.like_tweets('your hashtage or topic')
