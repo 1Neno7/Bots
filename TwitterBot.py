@@ -7,9 +7,10 @@ from time import sleep
 
 
 class TwitterBot:
-    def __init__(self, username, password):
+    def __init__(self, username, password, tel):
         self.username = username
         self.password = password
+        self.tel = tel
         self.bot = webdriver.Firefox()
 
     def login(self):
@@ -44,6 +45,18 @@ class TwitterBot:
         password.send_keys(Keys.RETURN)
         sleep(5)
 
+        # Find telephone Box
+        try:
+            tel = bot.find_element(
+                by=By.XPATH, value='//input[@type="tel"]')
+            tel.click()
+            tel.clear()
+            tel.send_keys(self.tel)
+            tel.send_keys(Keys.RETURN)
+            sleep(5)
+        except Exception as ex:
+            sleep(5)
+
     def like_tweets(self, hashtag):
         bot = self.bot
         latest = hashtag+' -filter:replies'
@@ -73,6 +86,6 @@ class TwitterBot:
             sleep(60*sleeptime3)
 
 
-neno = TwitterBot('your username', 'your password')
+neno = TwitterBot('your username', 'your password', 'your telephone')
 neno.login()
-neno.like_tweets('your hashtage or topic')
+neno.like_tweets('your hashtag or topic')
